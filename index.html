@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>haixoai — Speak Vietnamese with confidence</title>
+  <meta name="description" content="haixoai is a translator and language learning app for English speakers learning Vietnamese and travelers to Vietnam. Translate in real time and practice your pronunciation." />
+
+  <!-- Google Fonts: Paytone One (headers) + Gabarito (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Gabarito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== Header / Nav ===== -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="haixoai home">
+        <img class="brand-logo" src="assets/haixoai-logo.png" alt="" width="38" height="38" />
+        <span class="brand-name">haixoai</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#collaborate">Collaborate</a>
+        <a class="nav-cta" href="#signup">Get early access</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ===== Hero / Before the fold ===== -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Translator &amp; learning app for Vietnamese</p>
+          <h1 class="hero-title">Speak Vietnamese with confidence.</h1>
+          <p class="hero-sub">
+            haixoai starts listening the moment you open it. Translate what's
+            being said around you, or practice out loud and get instant feedback
+            on your tones and pronunciation. Built for beginners, learners, and
+            travelers.
+          </p>
+
+          <!-- Email collection (before the fold) -->
+          <form id="signup" class="signup-form" novalidate>
+            <label class="sr-only" for="email">Email address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              inputmode="email"
+              autocomplete="email"
+              placeholder="you@email.com"
+              required
+            />
+            <button type="submit">Get early access</button>
+            <p class="form-msg" role="status" aria-live="polite"></p>
+          </form>
+          <p class="hero-note">Be the first to know when we launch. No spam, ever.</p>
+        </div>
+
+        <div class="hero-visual">
+          <!-- Phone mockup placeholder — replace with screenshot/GIF later -->
+          <div class="phone-frame">
+            <div class="media-placeholder phone-screen">
+              <span>app preview</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== How it works (listen + practice) ===== -->
+    <section id="how-it-works" class="how">
+      <div class="container how-grid">
+        <div class="how-visual">
+          <!-- Phone mockup placeholder (listening screen) -->
+          <div class="phone-frame">
+            <div class="media-placeholder phone-screen">
+              <span>listening</span>
+            </div>
+          </div>
+        </div>
+        <div class="how-copy">
+          <h2 class="section-title">Listen, translate, and practice — instantly.</h2>
+          <p>
+            haixoai starts listening as soon as you open the app. Translate
+            what's being said, or start practicing your Vietnamese by saying
+            what's on your mind.
+          </p>
+
+          <!-- Practice / feedback card -->
+          <div class="feedback-card">
+            <p class="feedback-label">You said</p>
+            <p class="feedback-said">Tôi tên là…</p>
+            <div class="feedback-note">
+              You said <strong>lè</strong>, but it should be <strong>là</strong>.
+            </div>
+            <p class="feedback-help">
+              Get feedback on your pronunciation, tones, and accent — then try
+              again until it clicks.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Feature carousel (auto-loops 3 features) ===== -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="section-title center">Everything you need to learn faster</h2>
+
+        <div class="features-grid">
+          <!-- GIF stage -->
+          <div class="feature-stage">
+            <div class="phone-frame">
+              <div class="media-placeholder feature-gif" data-feature-gif>
+                <span data-gif-label>Converse with AI</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Descriptions list -->
+          <ul class="feature-list" role="tablist" aria-label="App features">
+            <li class="feature-item is-active" data-index="0">
+              <button type="button" class="feature-btn" role="tab" aria-selected="true">
+                <span class="feature-progress" aria-hidden="true"><span class="feature-progress-fill"></span></span>
+                <span class="feature-text">
+                  <span class="feature-name">Converse with AI</span>
+                  <span class="feature-desc">Hold natural conversations with an AI partner that adapts to your level.</span>
+                </span>
+              </button>
+            </li>
+            <li class="feature-item" data-index="1">
+              <button type="button" class="feature-btn" role="tab" aria-selected="false">
+                <span class="feature-progress" aria-hidden="true"><span class="feature-progress-fill"></span></span>
+                <span class="feature-text">
+                  <span class="feature-name">Save phrases &amp; words</span>
+                  <span class="feature-desc">Build your own vocabulary bank and revisit the phrases that matter to you.</span>
+                </span>
+              </button>
+            </li>
+            <li class="feature-item" data-index="2">
+              <button type="button" class="feature-btn" role="tab" aria-selected="false">
+                <span class="feature-progress" aria-hidden="true"><span class="feature-progress-fill"></span></span>
+                <span class="feature-text">
+                  <span class="feature-name">Practice common scenarios</span>
+                  <span class="feature-desc">Order food, hail a ride, or check in — rehearse real situations before you go.</span>
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Collaborate ===== -->
+    <section id="collaborate" class="collaborate">
+      <div class="container collaborate-card">
+        <div class="collaborate-photo">
+          <img src="assets/kenny-profile.png" alt="Kenny Kandola" width="120" height="120" />
+        </div>
+        <div class="collaborate-copy">
+          <h2 class="section-title">Let's build this together</h2>
+          <p>
+            Interested in haixoai? Want to collaborate, give feedback, or just
+            say hello? I'd love to hear from you.
+          </p>
+          <a class="email-btn" href="mailto:kkandola37@gmail.com">kkandola37@gmail.com</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="brand-name small">haixoai</span>
+      <p>&copy; <span id="year"></span> haixoai. Made for Vietnamese learners &amp; travelers.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
