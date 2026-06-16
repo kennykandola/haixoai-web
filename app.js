@@ -27,15 +27,28 @@
     });
   }
 
+  /* ===== Demo videos (autoplay + custom playback rate) ===== */
+  document.querySelectorAll("video[data-playback-rate]").forEach(function (video) {
+    var rate = parseFloat(video.getAttribute("data-playback-rate")) || 1;
+
+    function applyRate() {
+      video.playbackRate = rate;
+    }
+
+    applyRate();
+    video.addEventListener("loadedmetadata", applyRate);
+    video.play().catch(function () {});
+  });
+
   /* ===== Feature carousel (auto-loops, progress bar, highlight) ===== */
   var FEATURE_DURATION = 4000; // ms each feature stays active
 
   var items = Array.prototype.slice.call(
     document.querySelectorAll(".feature-item")
   );
-  var gifLabel = document.querySelector("[data-gif-label]");
+  var featureVideo = document.querySelector(".feature-stage video");
 
-  if (items.length && gifLabel) {
+  if (items.length) {
     var current = -1;
     var rafId = null;
     var startTime = 0;
@@ -48,18 +61,11 @@
         item.classList.toggle("is-active", active);
         var btn = item.querySelector(".feature-btn");
         if (btn) btn.setAttribute("aria-selected", active ? "true" : "false");
-        // reset all progress fills
         var fill = item.querySelector(".feature-progress-fill");
         if (fill) fill.style.height = active ? "0%" : "0%";
       });
 
-      // Update GIF stage (placeholder shows the feature name).
-      // When real GIFs are added, set a `data-gif` attribute on each
-      // .feature-item and swap the placeholder for an <img> here.
-      var name = items[index].querySelector(".feature-name");
-      gifLabel.textContent = name ? name.textContent : "";
-
-      startTime = 0; // reset timer for the new feature
+      startTime = 0;
     }
 
     function tick(now) {
@@ -80,7 +86,6 @@
       rafId = requestAnimationFrame(tick);
     }
 
-    // Click / keyboard to jump to a feature
     items.forEach(function (item, i) {
       var btn = item.querySelector(".feature-btn");
       if (btn) {
@@ -90,19 +95,32 @@
       }
     });
 
-    // Pause when tab not visible to keep things in sync
+    if (featureVideo) {
+      featureVideo.play().catch(function () {});
+    }
+
     document.addEventListener("visibilitychange", function () {
       paused = document.hidden;
-      if (!paused) startTime = 0;
+      if (featureVideo) {
+        if (document.hidden) {
+          featureVideo.pause();
+        } else {
+          featureVideo.play().catch(function () {});
+          startTime = 0;
+        }
+      }
     });
 
-    // Pause on hover (desktop) for readability
     var stage = document.querySelector(".features-grid");
     if (stage && window.matchMedia("(hover: hover)").matches) {
-      stage.addEventListener("mouseenter", function () { paused = true; });
+      stage.addEventListener("mouseenter", function () {
+        paused = true;
+        if (featureVideo) featureVideo.pause();
+      });
       stage.addEventListener("mouseleave", function () {
         paused = false;
         startTime = 0;
+        if (featureVideo) featureVideo.play().catch(function () {});
       });
     }
 
