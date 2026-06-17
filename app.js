@@ -40,6 +40,48 @@
     video.play().catch(function () {});
   });
 
+  /* ===== Copy email ===== */
+  var copyBtn = document.querySelector(".copy-email-btn");
+  if (copyBtn) {
+    var tooltip = copyBtn.parentElement.querySelector(".copy-tooltip");
+    var copyText = copyBtn.getAttribute("data-copy") || "";
+    var tooltipTimer = null;
+
+    function showTooltip() {
+      if (!tooltip) return;
+      tooltip.classList.add("is-visible");
+      clearTimeout(tooltipTimer);
+      tooltipTimer = setTimeout(function () {
+        tooltip.classList.remove("is-visible");
+      }, 2000);
+    }
+
+    function copyEmail() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(copyText);
+      }
+      return new Promise(function (resolve, reject) {
+        var area = document.createElement("textarea");
+        area.value = copyText;
+        area.setAttribute("readonly", "");
+        area.style.position = "absolute";
+        area.style.left = "-9999px";
+        document.body.appendChild(area);
+        area.select();
+        try {
+          document.execCommand("copy") ? resolve() : reject();
+        } catch (err) {
+          reject(err);
+        }
+        document.body.removeChild(area);
+      });
+    }
+
+    copyBtn.addEventListener("click", function () {
+      copyEmail().then(showTooltip).catch(function () {});
+    });
+  }
+
   /* ===== Feature carousel (auto-loops, progress bar, highlight) ===== */
   var FEATURE_DURATION = 4000; // ms each feature stays active
 
