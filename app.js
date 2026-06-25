@@ -5,14 +5,21 @@
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ===== Email signup (front-end only, no backend yet) ===== */
+  /* ===== Email signup (Supabase waitlist) ===== */
   var form = document.getElementById("signup");
   if (form) {
     var msg = form.querySelector(".form-msg");
     var input = form.querySelector("#email");
+    var button = form.querySelector('button[type="submit"]');
+    var config = window.HAIXOAI_SUPABASE;
+    var supabase =
+      config && window.supabase
+        ? window.supabase.createClient(config.url, config.publishableKey)
+        : null;
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var value = (input.value || "").trim();
+      var value = (input.value || "").trim().toLowerCase();
       var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
       if (!valid) {
         msg.textContent = "Please enter a valid email address.";
@@ -20,10 +27,39 @@
         input.focus();
         return;
       }
-      // TODO: wire up to a real email service (Formspree, Mailchimp, etc.)
-      msg.textContent = "Thanks! You're on the list — we'll be in touch.";
-      msg.className = "form-msg ok";
-      form.reset();
+      if (!supabase) {
+        msg.textContent = "Signup is temporarily unavailable. Please try again later.";
+        msg.className = "form-msg err";
+        return;
+      }
+
+      if (button) button.disabled = true;
+      msg.textContent = "";
+
+      supabase
+        .from("waitlist")
+        .insert({ email: value })
+        .then(function (result) {
+          if (result.error) {
+            if (result.error.code === "23505") {
+              msg.textContent = "You're already on the list — we'll be in touch.";
+              msg.className = "form-msg ok";
+              form.reset();
+              return;
+            }
+            throw result.error;
+          }
+          msg.textContent = "Thanks! You're on the list — we'll be in touch.";
+          msg.className = "form-msg ok";
+          form.reset();
+        })
+        .catch(function () {
+          msg.textContent = "Something went wrong. Please try again.";
+          msg.className = "form-msg err";
+        })
+        .finally(function () {
+          if (button) button.disabled = false;
+        });
     });
   }
 

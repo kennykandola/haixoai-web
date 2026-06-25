@@ -163,6 +163,10 @@ a { color: inherit; text-decoration: none; }
 }
 .signup-form button:hover { background: var(--yellow-dark); }
 .signup-form button:active { transform: translateY(1px); }
+.signup-form button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
 .form-msg {
   flex: 1 1 100%;
   margin: 4px 4px 0;
