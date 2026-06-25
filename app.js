@@ -12,10 +12,23 @@
     var input = form.querySelector("#email");
     var button = form.querySelector('button[type="submit"]');
     var config = window.HAIXOAI_SUPABASE;
+    var debugWaitlist = /[?&]debug=1(?:&|$)/.test(window.location.search);
     var supabase =
       config && window.supabase
         ? window.supabase.createClient(config.url, config.publishableKey)
         : null;
+
+    function logWaitlist(label, payload) {
+      console.log("[waitlist]", label, payload);
+    }
+
+    if (debugWaitlist) {
+      logWaitlist("init", {
+        hasConfig: !!config,
+        hasClient: !!supabase,
+        url: config && config.url,
+      });
+    }
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -30,31 +43,52 @@
       if (!supabase) {
         msg.textContent = "Signup is temporarily unavailable. Please try again later.";
         msg.className = "form-msg err";
+        console.error("[waitlist] Supabase client not initialized");
         return;
       }
 
       if (button) button.disabled = true;
       msg.textContent = "";
 
+      logWaitlist("submit", { email: value });
+
       supabase
         .from("waitlist")
-        .insert({ email: value })
+        .insert({ email: value }, { returning: "minimal" })
         .then(function (result) {
+          logWaitlist("response", result);
+
           if (result.error) {
+            console.error("[waitlist] insert error", result.error);
+
             if (result.error.code === "23505") {
               msg.textContent = "You're already on the list — we'll be in touch.";
               msg.className = "form-msg ok";
               form.reset();
               return;
             }
+
+            if (debugWaitlist) {
+              msg.textContent =
+                "Debug: " + (result.error.message || result.error.code || "insert failed");
+              msg.className = "form-msg err";
+              return;
+            }
+
             throw result.error;
           }
+
           msg.textContent = "Thanks! You're on the list — we'll be in touch.";
           msg.className = "form-msg ok";
           form.reset();
         })
-        .catch(function () {
-          msg.textContent = "Something went wrong. Please try again.";
+        .catch(function (err) {
+          console.error("[waitlist] insert failed", err);
+          if (debugWaitlist && err && err.message) {
+            msg.textContent = "Debug: " + err.message;
+          } else {
+            msg.textContent = "Something went wrong. Please try again.";
+          }
           msg.className = "form-msg err";
         })
         .finally(function () {
